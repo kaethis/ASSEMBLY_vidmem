@@ -102,12 +102,12 @@ INCLUDE Macros.inc
   SCREENY_MAX		= 24
   LINE			= 80
 
-  KEY_UP		= 077h	; i.e, w
-  KEY_DOWN		= 073h	;      s
-  KEY_LEFT		= 061h  ;      a
-  KEY_RIGHT		= 064h  ;      d
+  KEY_UP		= 077h	; i.e.	w
+  KEY_DOWN		= 073h	;	s
+  KEY_LEFT		= 061h  ;	a
+  KEY_RIGHT		= 064h  ;	d
 
-.code ; -----------------------------------------------------------------------------
+.code ; _____________________________________________________________________________
 
 
   main PROC
@@ -117,7 +117,6 @@ INCLUDE Macros.inc
 
 
     Start:
-
 	call CheckFrame			; Update alien Sprite sheet.
 
 	lea ESI, alien 
@@ -169,24 +168,24 @@ INCLUDE Macros.inc
 	jne Input_End			; IF no key has been pressed (or the key
 					;  pressed is invalid), skip over input.
 
-	  Move_Alien_Up:
-		sub alien.y, 1
-		jmp Move_Alien_End
+    Move_Alien_Up:
+	sub alien.y, 1
+	jmp Move_Alien_End
 
-	  Move_Alien_Down:
-		add alien.y, 1
-		jmp Move_Alien_End
+    Move_Alien_Down:
+	add alien.y, 1
+	jmp Move_Alien_End
 
-	  Move_Alien_Left:
-		sub alien.x, 1
-		jmp Move_Alien_End
+    Move_Alien_Left:
+	sub alien.x, 1
+	jmp Move_Alien_End
 
-	  Move_Alien_Right:
-		add alien.x, 1
+    Move_Alien_Right:
+	add alien.x, 1
 
 
-	  Move_Alien_End:
-		_UpdateOffset alien	; Since the x- or y-coodinate of the Sprite
+    Move_Alien_End:
+	_UpdateOffset alien		; Since the x- or y-coodinate of the Sprite
 					;  had been updated, recalculate the value
 					;  of the offset.
 
@@ -210,15 +209,15 @@ INCLUDE Macros.inc
 	je Alien_Frame0			; IF 0, the x-coordinate value is EVEN.
 	jne Alien_Frame1		; ELSE, the x-coor value is ODD.
 
-	  Alien_Frame0:
-		_SetSheet alien, alien_sheet0
-		jmp Alien_Frame_End
+    Alien_Frame0:
+	_SetSheet alien, alien_sheet0
+	jmp Alien_Frame_End
 
-	  Alien_Frame1:
-		_SetSheet alien, alien_sheet1
+    Alien_Frame1:
+	_SetSheet alien, alien_sheet1
 
 
-	  Alien_Frame_End:
+    Alien_Frame_End:
 
 	ret
   CheckFrame ENDP
@@ -252,7 +251,6 @@ INCLUDE Macros.inc
 			jz Write_End		; IF NOT 0, proceed to write.
 
 		    Write:
-
 			push ESI
 
 			mov ESI,  address
@@ -261,7 +259,6 @@ INCLUDE Macros.inc
 			pop ESI
 
 		    Write_End:
-
 			inc EDI
 			inc address
 
@@ -275,6 +272,7 @@ INCLUDE Macros.inc
 		add address, EAX
 
 		pop ECX				; Restore outer-loop count.
+
 		loop Column_Loop
 
 	ret
@@ -307,7 +305,6 @@ INCLUDE Macros.inc
 			jz Write_End
 
 		    Write:
-
 			push ESI
 
 			mov ESI, address 
@@ -316,10 +313,9 @@ INCLUDE Macros.inc
 			pop ESI
 
 		    Write_End:
-
 			inc EDI
-
 			inc address 
+
 			loop Row_Loop		
 
 		mov EAX, LINE
@@ -328,6 +324,7 @@ INCLUDE Macros.inc
 		add address, EAX
 
 		pop ECX
+
 		loop Column_Loop
 
 	ret
@@ -356,14 +353,14 @@ INCLUDE Macros.inc
 
 		movzx EAX, BYTE PTR [ESI]
 		call WriteDec
-
 		inc ESI
 
 		loop Write_Loop
 
 	ret
   DrawMem ENDP
-  
+ 
+ 
   ClearMem PROC uses EDI ECX
   ; ---------------------------------------------------------------------------------
   ; CALL this PROC to write the entire video_memory array with zeroes, effectively
@@ -379,12 +376,12 @@ INCLUDE Macros.inc
 		jz Write_End			; IF already zero, don't overwrite.
 
 	    Write:
-
 		mov video_memory[ESI], 0
 
 	    Write_End:
-
 		inc EDI
+
+		loop Clear_Loop
 
 	ret
   ClearMem ENDP
@@ -403,8 +400,9 @@ INCLUDE Macros.inc
 
 	movzx ECX, AH
 	  Y_Loop:
+
 		add EBX, LINE
-		loop Y_Loop;
+		loop Y_Loop
 
 	movzx EAX, AL
 	add EBX, EAX
